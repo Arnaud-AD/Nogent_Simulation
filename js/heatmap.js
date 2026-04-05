@@ -15,6 +15,20 @@ const FULL_NAMES = {
   "SCNP": "SC Nord Parisien"
 };
 
+// Short names for mobile heatmap
+const SHORT_NAMES = {
+  "Villejuif": "Villejuif",
+  "Pantin": "Pantin",
+  "Isle Adam": "Isle Adam",
+  "Bussy": "Bussy",
+  "St-Pierre": "St-Pierre",
+  "Nogentais": "Nogentais",
+  "Champs": "Champs",
+  "Tremblay": "Tremblay",
+  "Vincennes": "Vincennes",
+  "SCNP": "SCNP"
+};
+
 function getColor(value, maxVal) {
   if (value === 0) return 'rgba(26, 26, 46, 0.8)';
   const ratio = Math.min(value / Math.max(maxVal, 1), 1);
@@ -83,47 +97,36 @@ function renderHeatmap(results) {
   // Build rows
   results.teamDetails.forEach((detail, teamIdx) => {
     const probs = detail.probabilities;
-    const champPct = detail.championPct;
-    const maintPct = detail.maintenancePct;
     const isNogentais = detail.name === 'Nogentais';
     const isLastSafe = teamIdx === 6; // 7th position is last safe
 
     const tr = document.createElement('tr');
     if (isLastSafe) tr.classList.add('relegation-line');
 
-    // Team name cell
+    // Team name cell — short name for mobile
     const teamTd = document.createElement('td');
     teamTd.className = 'team-cell' + (isNogentais ? ' nogentais' : '');
-    const displayName = FULL_NAMES[detail.name] || detail.name;
-    teamTd.innerHTML = `${isNogentais ? '★ ' : ''}${displayName} <span class="pts">(${detail.currentPoints}pts)</span>`;
+    const displayName = SHORT_NAMES[detail.name] || detail.name;
+    teamTd.innerHTML = `${isNogentais ? '★ ' : ''}${displayName} <span class="pts">${detail.currentPoints}</span>`;
     tr.appendChild(teamTd);
 
-    // Position probabilities
+    // Position probabilities — compact values
     probs.forEach(prob => {
       const td = document.createElement('td');
       td.style.backgroundColor = getColor(prob, globalMax);
       td.style.color = getTextColor(prob, globalMax);
-      td.style.borderRadius = '4px';
+      td.style.borderRadius = '3px';
       if (prob > 0) {
-        td.textContent = prob < 0.1 ? '' : prob.toFixed(1);
+        // Show integer for values >= 1, skip tiny values
+        if (prob >= 1) {
+          td.textContent = Math.round(prob);
+        } else if (prob >= 0.1) {
+          td.textContent = prob.toFixed(1);
+        }
       }
       if (isNogentais) td.style.fontWeight = '700';
       tr.appendChild(td);
     });
-
-    // Champion % side cell
-    const champTd = document.createElement('td');
-    champTd.className = 'side-cell';
-    champTd.innerHTML = champPct > 0
-      ? `<span class="champ">${champPct.toFixed(1)}%</span>`
-      : '—';
-    tr.appendChild(champTd);
-
-    // Maintenance % side cell
-    const maintTd = document.createElement('td');
-    maintTd.className = 'side-cell';
-    maintTd.innerHTML = `<span class="maint">${maintPct.toFixed(1)}%</span>`;
-    tr.appendChild(maintTd);
 
     tbody.appendChild(tr);
   });
