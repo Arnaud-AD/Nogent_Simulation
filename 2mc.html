@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulation Monte Carlo — Poule 2MC</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-poule="data/poule_2mc.json">
+<div class="container">
+  <h1>Poule 2MC — Régional 2 Masculin IDF</h1>
+  <div class="subtitle">Chargement...</div>
+
+  <div id="loadingIndicator" class="loading">
+    <div class="spinner"></div>
+    <div>Simulation en cours...</div>
+  </div>
+
+  <div id="mainContent">
+    <div class="metrics">
+      <div class="metric-card highlight">
+        <div class="label">Villemomble — Champion</div>
+        <div class="value red" id="nogChamp">—</div>
+        <div class="detail">Probabilité 1er</div>
+      </div>
+      <div class="metric-card highlight">
+        <div class="label">Villemomble — Maintien</div>
+        <div class="value green" id="nogMaint">—</div>
+        <div class="detail">Top 7</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Position médiane</div>
+        <div class="value blue" id="nogMedian">—</div>
+        <div class="detail">Position la + probable</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Points actuels</div>
+        <div class="value orange" id="nogPoints">—</div>
+        <div class="detail">Classement actuel</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span>0%</span>
+      <div class="legend-bar"></div>
+      <span>max</span>
+    </div>
+
+    <div class="heatmap-wrapper">
+      <table class="heatmap" id="heatmapTable">
+        <thead>
+          <tr>
+            <th class="team-header">Équipe</th>
+            <th class="pos-header">1</th>
+            <th class="pos-header">2</th>
+            <th class="pos-header">3</th>
+            <th class="pos-header">4</th>
+            <th class="pos-header">5</th>
+            <th class="pos-header">6</th>
+            <th class="pos-header">7</th>
+            <th class="pos-header">8</th>
+            <th class="pos-header">9</th>
+            <th class="pos-header">10</th>
+          </tr>
+        </thead>
+        <tbody id="heatmapBody"></tbody>
+      </table>
+    </div>
+
+    <div class="scenario-section">
+      <h2>Scénarios — Et si... ?</h2>
+      <div class="scenario-subtitle">Sélectionnez un score pour chaque match restant pour voir l'impact sur le classement</div>
+      <button class="scenario-reset-btn" id="scenarioResetBtn" disabled>Réinitialiser tout</button>
+      <div id="scenarioContainer"></div>
+    </div>
+
+    <div class="methodology">
+      <h3>Méthodologie</h3>
+      <p>
+        Modèle Bradley-Terry calibré sur les matchs joués de la saison.
+        Chaque simulation génère les matchs restants en tirant le vainqueur selon les probabilités du modèle,
+        puis le score (3-0, 3-1 ou 3-2) selon la force relative des équipes.
+        Les classements respectent les règles FFVB : points, quotient de sets, quotient de points.
+        Aucun avantage domicile appliqué (effet non significatif en régional).
+      </p>
+    </div>
+
+    <div class="footer">
+      Données : ffvbbeach.org · Poule 2MC LIIDF · 10 000 simulations Monte Carlo
+    </div>
+  </div>
+</div>
+
+<script src="js/simulation.js"></script>
+<script src="js/heatmap.js"></script>
+<script src="js/scenario.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

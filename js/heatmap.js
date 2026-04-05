@@ -2,32 +2,8 @@
  * Heatmap rendering module
  */
 
-const FULL_NAMES = {
-  "Villejuif": "US Villejuif",
-  "Pantin": "Pantin Volley",
-  "Isle Adam": "Isle Adam FVO",
-  "Bussy": "Bussy Volley",
-  "St-Pierre": "St-Pierre VB",
-  "Nogentais": "VC Nogentais",
-  "Champs": "VC Champs/Marne",
-  "Tremblay": "Tremblay AC",
-  "Vincennes": "Vincennes VC",
-  "SCNP": "SC Nord Parisien"
-};
-
-// Short names for mobile heatmap
-const SHORT_NAMES = {
-  "Villejuif": "Villejuif",
-  "Pantin": "Pantin",
-  "Isle Adam": "Isle Adam",
-  "Bussy": "Bussy",
-  "St-Pierre": "St-Pierre",
-  "Nogentais": "Nogentais",
-  "Champs": "Champs",
-  "Tremblay": "Tremblay",
-  "Vincennes": "Vincennes",
-  "SCNP": "SCNP"
-};
+// Highlight team is set dynamically from data
+let highlightTeam = 'Nogentais';
 
 function getColor(value, maxVal) {
   if (value === 0) return 'rgba(26, 26, 46, 0.8)';
@@ -64,72 +40,63 @@ function getTextColor(value, maxVal) {
   return ratio > 0.6 ? '#1a1a2e' : '#fff';
 }
 
+function setHighlightTeam(name) {
+  highlightTeam = name;
+}
+
 /**
  * Render the heatmap table and update metric cards
- * @param {Object} results - simulation results from runSimulation
  */
 function renderHeatmap(results) {
   const tbody = document.getElementById('heatmapBody');
   tbody.innerHTML = '';
 
   const globalMax = Math.max(...results.probabilityMatrix.flat());
-  const n = results.teams.length;
 
-  // Update Nogentais metrics
-  const nogDetail = results.teamDetails.find(t => t.name === 'Nogentais');
-  if (nogDetail) {
-    document.getElementById('nogChamp').textContent = nogDetail.championPct.toFixed(1) + '%';
-    document.getElementById('nogMaint').textContent = nogDetail.maintenancePct.toFixed(1) + '%';
-    document.getElementById('nogMedian').textContent = nogDetail.medianPosition + (nogDetail.medianPosition === 1 ? 'er' : 'e');
-    document.getElementById('nogPoints').textContent = nogDetail.currentPoints + ' pts';
+  // Update highlight team metrics
+  const detail = results.teamDetails.find(t => t.name === highlightTeam);
+  if (detail) {
+    document.getElementById('nogChamp').textContent = detail.championPct.toFixed(1) + '%';
+    document.getElementById('nogMaint').textContent = detail.maintenancePct.toFixed(1) + '%';
+    document.getElementById('nogMedian').textContent = detail.medianPosition + (detail.medianPosition === 1 ? 'er' : 'e');
+    document.getElementById('nogPoints').textContent = detail.currentPoints + ' pts';
 
-    // Color the champion value
     const champEl = document.getElementById('nogChamp');
-    if (nogDetail.championPct > 10) {
-      champEl.className = 'value orange';
-    } else if (nogDetail.championPct > 0) {
-      champEl.className = 'value red';
-    } else {
-      champEl.className = 'value red';
-    }
+    champEl.className = detail.championPct > 10 ? 'value orange' : detail.championPct > 0 ? 'value green' : 'value red';
   }
 
   // Build rows
-  results.teamDetails.forEach((detail, teamIdx) => {
-    const probs = detail.probabilities;
-    const isNogentais = detail.name === 'Nogentais';
-    const isLastSafe = teamIdx === 6; // 7th position is last safe
+  results.teamDetails.forEach((td, teamIdx) => {
+    const probs = td.probabilities;
+    const isHighlight = td.name === highlightTeam;
+    const isLastSafe = teamIdx === 6;
 
     const tr = document.createElement('tr');
     if (isLastSafe) tr.classList.add('relegation-line');
 
-    // Team name cell — short name for mobile
     const teamTd = document.createElement('td');
-    teamTd.className = 'team-cell' + (isNogentais ? ' nogentais' : '');
-    const displayName = SHORT_NAMES[detail.name] || detail.name;
-    teamTd.innerHTML = `${isNogentais ? '★ ' : ''}${displayName} <span class="pts">${detail.currentPoints}</span>`;
+    teamTd.className = 'team-cell' + (isHighlight ? ' nogentais' : '');
+    teamTd.innerHTML = `${isHighlight ? '★ ' : ''}${td.name} <span class="pts">${td.currentPoints}</span>`;
     tr.appendChild(teamTd);
 
-    // Position probabilities — compact values
     probs.forEach(prob => {
-      const td = document.createElement('td');
-      td.style.backgroundColor = getColor(prob, globalMax);
-      td.style.color = getTextColor(prob, globalMax);
-      td.style.borderRadius = '3px';
+      const cell = document.createElement('td');
+      cell.style.backgroundColor = getColor(prob, globalMax);
+      cell.style.color = getTextColor(prob, globalMax);
+      cell.style.borderRadius = '3px';
       if (prob > 0) {
-        // Show integer for values >= 1, skip tiny values
         if (prob >= 1) {
-          td.textContent = Math.round(prob);
+          cell.textContent = Math.round(prob);
         } else if (prob >= 0.1) {
-          td.textContent = prob.toFixed(1);
+          cell.textContent = prob.toFixed(1);
         }
       }
-      if (isNogentais) td.style.fontWeight = '700';
-      tr.appendChild(td);
+      if (isHighlight) cell.style.fontWeight = '700';
+      tr.appendChild(cell);
     });
 
     tbody.appendChild(tr);
   });
 }
 
-window.Heatmap = { renderHeatmap, FULL_NAMES };
+window.Heatmap = { renderHeatmap, setHighlightTeam };

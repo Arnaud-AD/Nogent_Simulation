@@ -11,11 +11,16 @@ const SCORES = [
   { label: '0-3', homeSets: 0, awaySets: 3 },
 ];
 
-const STORAGE_KEY = 'nogent_mc_scenarios';
+let STORAGE_KEY = 'nogent_mc_scenarios';
 
 // Current forced results: { "home|away": { homeSets, awaySets } }
 let forcedResults = loadFromStorage();
 let onChangeCallback = null;
+
+function setStorageKey(key) {
+  STORAGE_KEY = key;
+  forcedResults = loadFromStorage();
+}
 
 function loadFromStorage() {
   try {
@@ -89,8 +94,8 @@ function renderScenarios(remainingMatches, onChange) {
       const row = document.createElement('div');
       row.className = 'match-row' + (forcedResults[key] ? ' has-selection' : '');
 
-      const homeName = Heatmap.FULL_NAMES[match.home] || match.home;
-      const awayName = Heatmap.FULL_NAMES[match.away] || match.away;
+      const homeName = match.home;
+      const awayName = match.away;
 
       const teams = document.createElement('div');
       teams.className = 'match-teams';
@@ -144,4 +149,4 @@ function renderScenarios(remainingMatches, onChange) {
   });
 }
 
-window.Scenario = { renderScenarios, getForcedResultsArray };
+window.Scenario = { renderScenarios, getForcedResultsArray, setStorageKey };

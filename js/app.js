@@ -8,14 +8,28 @@ async function init() {
   showLoading(true);
 
   try {
-    const response = await fetch('data/poule_2mb.json');
+    const dataFile = document.body.dataset.poule || 'data/poule_2mb.json';
+    const response = await fetch(dataFile);
     if (!response.ok) throw new Error('Impossible de charger les données');
     pouleData = await response.json();
 
-    // Update subtitle
+    // Configure highlight team and localStorage key from data
+    const team = pouleData.highlightTeam || 'Nogentais';
+    Heatmap.setHighlightTeam(team);
+    Scenario.setStorageKey('mc_scenarios_' + pouleData.poule);
+
+    // Update title and subtitle from data
+    const h1 = document.querySelector('h1');
+    if (h1 && pouleData.poule) {
+      h1.textContent = `Poule ${pouleData.poule} — Régional 2 Masculin IDF`;
+    }
+    // Update metric labels
+    document.querySelectorAll('.metric-card .label').forEach(el => {
+      el.textContent = el.textContent.replace(/Nogentais/gi, team);
+    });
+
     const remaining = pouleData.remainingMatches.length;
-    const subtitle = document.querySelector('.subtitle');
-    subtitle.textContent = `Matchs restants : ${remaining}`;
+    document.querySelector('.subtitle').textContent = `Matchs restants : ${remaining}`;
 
     // Render scenario controls (V3) — loads saved selections from localStorage
     Scenario.renderScenarios(pouleData.remainingMatches, onScenarioChange);
