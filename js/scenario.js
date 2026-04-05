@@ -11,9 +11,24 @@ const SCORES = [
   { label: '0-3', homeSets: 0, awaySets: 3 },
 ];
 
+const STORAGE_KEY = 'nogent_mc_scenarios';
+
 // Current forced results: { "home|away": { homeSets, awaySets } }
-let forcedResults = {};
+let forcedResults = loadFromStorage();
 let onChangeCallback = null;
+
+function loadFromStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : {};
+  } catch { return {}; }
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(forcedResults));
+  } catch { /* quota exceeded or private mode */ }
+}
 
 function getForcedResultsArray() {
   return Object.entries(forcedResults).map(([key, val]) => {
@@ -40,10 +55,22 @@ function renderScenarios(remainingMatches, onChange) {
     byJournee[j].push(m);
   });
 
+  // Clean up stale entries (matches that have been played since last visit)
+  const remainingKeys = new Set(remainingMatches.map(m => m.home + '|' + m.away));
+  let cleaned = false;
+  Object.keys(forcedResults).forEach(key => {
+    if (!remainingKeys.has(key)) {
+      delete forcedResults[key];
+      cleaned = true;
+    }
+  });
+  if (cleaned) saveToStorage();
+
   const resetBtn = document.getElementById('scenarioResetBtn');
   resetBtn.disabled = Object.keys(forcedResults).length === 0;
   resetBtn.onclick = () => {
     forcedResults = {};
+    saveToStorage();
     renderScenarios(remainingMatches, onChange);
     onChange(getForcedResultsArray());
   };
@@ -101,6 +128,7 @@ function renderScenarios(remainingMatches, onChange) {
           } else {
             forcedResults[key] = { homeSets: score.homeSets, awaySets: score.awaySets };
           }
+          saveToStorage();
           renderScenarios(remainingMatches, onChange);
           onChange(getForcedResultsArray());
         });

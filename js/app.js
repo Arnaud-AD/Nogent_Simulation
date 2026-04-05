@@ -18,11 +18,11 @@ async function init() {
     const subtitle = document.querySelector('.subtitle');
     subtitle.textContent = `Simulation Monte Carlo · 10 000 itérations · Saison ${pouleData.saison} · ${remaining} matchs restants · MAJ ${pouleData.lastUpdated}`;
 
-    // Run initial simulation
-    runAndRender([]);
-
-    // Render scenario controls (V3)
+    // Render scenario controls (V3) — loads saved selections from localStorage
     Scenario.renderScenarios(pouleData.remainingMatches, onScenarioChange);
+
+    // Run initial simulation with any saved scenarios
+    runAndRender(Scenario.getForcedResultsArray());
 
   } catch (err) {
     console.error(err);
