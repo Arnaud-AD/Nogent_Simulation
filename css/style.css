@@ -1,0 +1,416 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  padding: 16px;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+/* Loading spinner */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+.loading .spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid #2a2a4a;
+  border-top-color: #f39c12;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Metrics cards */
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background: #16213e;
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+  border: 1px solid #2a2a4a;
+}
+
+.metric-card.highlight {
+  border-color: #f39c12;
+  background: linear-gradient(135deg, #1a1a2e, #2d1f0e);
+}
+
+.metric-card .label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.metric-card .value {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.metric-card .value.green { color: #2ecc71; }
+.metric-card .value.red { color: #e74c3c; }
+.metric-card .value.orange { color: #f39c12; }
+.metric-card .value.blue { color: #3498db; }
+
+.metric-card .detail {
+  font-size: 0.6rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.legend-bar {
+  width: 160px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(to right, #1a1a2e, #c0392b, #e67e22, #f1c40f, #2ecc71);
+}
+
+/* Heatmap */
+.heatmap-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+table.heatmap {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 680px;
+}
+
+table.heatmap th {
+  padding: 8px 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #aaa;
+  text-align: center;
+  white-space: nowrap;
+}
+
+table.heatmap th.team-header {
+  text-align: left;
+  padding-left: 8px;
+  position: sticky;
+  left: 0;
+  background: #1a1a2e;
+  z-index: 3;
+  min-width: 140px;
+}
+
+table.heatmap th.pos-header {
+  width: 46px;
+}
+
+table.heatmap th.side-header {
+  width: 56px;
+  font-size: 0.6rem;
+}
+
+table.heatmap td {
+  padding: 10px 2px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: transform 0.1s;
+  position: relative;
+}
+
+table.heatmap td.team-cell {
+  text-align: left;
+  padding-left: 8px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  background: #1a1a2e !important;
+  color: #ccc;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+table.heatmap td.team-cell .pts {
+  font-weight: 400;
+  color: #888;
+  font-size: 0.65rem;
+}
+
+table.heatmap td.team-cell.nogentais {
+  color: #f39c12;
+}
+
+table.heatmap td.side-cell {
+  background: transparent !important;
+  font-size: 0.65rem;
+  color: #888;
+  padding: 10px 4px;
+}
+
+table.heatmap td.side-cell .champ { color: #f1c40f; font-weight: 600; }
+table.heatmap td.side-cell .maint { color: #2ecc71; font-weight: 600; }
+
+tr.relegation-line td {
+  border-bottom: 3px solid #e74c3c !important;
+}
+
+/* Scenario section (V3) */
+.scenario-section {
+  margin-top: 24px;
+}
+
+.scenario-section h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.scenario-section .scenario-subtitle {
+  font-size: 0.7rem;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.scenario-reset-btn {
+  display: inline-block;
+  background: #2a2a4a;
+  color: #aaa;
+  border: 1px solid #3a3a5a;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  margin-bottom: 12px;
+  font-family: 'Inter', sans-serif;
+}
+
+.scenario-reset-btn:hover {
+  background: #3a3a5a;
+  color: #fff;
+}
+
+.scenario-reset-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Match rows grouped by journee */
+.journee-group {
+  margin-bottom: 16px;
+}
+
+.journee-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #f39c12;
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.match-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #16213e;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border: 1px solid #2a2a4a;
+  flex-wrap: wrap;
+}
+
+.match-row.has-selection {
+  border-color: #f39c12;
+  background: linear-gradient(135deg, #16213e, #2d1f0e);
+}
+
+.match-teams {
+  flex: 1;
+  min-width: 120px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.match-teams .home { color: #ccc; }
+.match-teams .vs { color: #555; font-size: 0.65rem; margin: 0 4px; }
+.match-teams .away { color: #ccc; }
+.match-teams .date-info { display: block; font-size: 0.6rem; color: #555; margin-top: 2px; }
+
+.score-buttons {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.score-btn {
+  background: #2a2a4a;
+  color: #888;
+  border: 1px solid #3a3a5a;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  min-width: 36px;
+  text-align: center;
+  transition: all 0.15s;
+}
+
+.score-btn:hover {
+  background: #3a3a5a;
+  color: #fff;
+}
+
+.score-btn.selected {
+  background: #f39c12;
+  color: #1a1a2e;
+  border-color: #f39c12;
+}
+
+.score-btn.home-win {
+  border-top: 2px solid transparent;
+}
+
+.score-btn.away-win {
+  border-top: 2px solid transparent;
+}
+
+.score-btn.selected.home-win {
+  background: #2ecc71;
+  border-color: #2ecc71;
+  color: #1a1a2e;
+}
+
+.score-btn.selected.away-win {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+}
+
+/* Methodology */
+.methodology {
+  background: #16213e;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 20px;
+  border: 1px solid #2a2a4a;
+}
+
+.methodology h3 {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.methodology p {
+  font-size: 0.7rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  font-size: 0.6rem;
+  color: #555;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a4a;
+}
+
+/* Desktop overrides */
+@media (min-width: 768px) {
+  body { padding: 30px; }
+
+  h1 { font-size: 1.5rem; }
+  .subtitle { font-size: 0.9rem; margin-bottom: 24px; }
+
+  .metrics {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .metric-card {
+    padding: 20px 28px;
+    min-width: 200px;
+  }
+
+  .metric-card .label { font-size: 0.8rem; }
+  .metric-card .value { font-size: 2.2rem; }
+  .metric-card .detail { font-size: 0.75rem; }
+
+  .legend { font-size: 0.75rem; }
+  .legend-bar { width: 200px; height: 14px; }
+
+  table.heatmap { min-width: 900px; }
+  table.heatmap th { padding: 10px 6px; font-size: 0.8rem; }
+  table.heatmap th.team-header { min-width: 220px; padding-left: 12px; }
+  table.heatmap th.pos-header { width: 70px; }
+  table.heatmap th.side-header { width: 80px; font-size: 0.7rem; }
+  table.heatmap td { padding: 12px 4px; font-size: 0.85rem; }
+  table.heatmap td.team-cell { padding-left: 12px; font-size: 0.85rem; }
+  table.heatmap td.side-cell { font-size: 0.75rem; padding: 12px 8px; }
+
+  .match-row { flex-wrap: nowrap; }
+  .match-teams { min-width: 200px; font-size: 0.85rem; }
+  .score-btn { padding: 8px 12px; font-size: 0.75rem; min-width: 44px; }
+
+  .methodology { padding: 20px; }
+  .methodology h3 { font-size: 0.9rem; }
+  .methodology p { font-size: 0.8rem; }
+  .footer { font-size: 0.7rem; }
+}

@@ -1,0 +1,9 @@
+CLAUDE.md
+__pycache__/
+*.pyc
+.env
+node_modules/
+.claude/
+.DS_Store
+*.log
+heatmap_2mb.html
