@@ -203,12 +203,13 @@ tr.relegation-line td {
 
 .scenario-reset-btn {
   display: inline-block;
-  background: #2a2a4a;
-  color: #aaa;
-  border: 1px solid #3a3a5a;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
   border-radius: 6px;
-  padding: 6px 14px;
+  padding: 8px 16px;
   font-size: 0.65rem;
+  font-weight: 600;
   cursor: pointer;
   margin-bottom: 10px;
   font-family: 'Inter', sans-serif;
@@ -216,12 +217,11 @@ tr.relegation-line td {
 }
 
 .scenario-reset-btn:active {
-  background: #3a3a5a;
-  color: #fff;
+  background: #c0392b;
 }
 
 .scenario-reset-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
 /* Match rows grouped by journee */

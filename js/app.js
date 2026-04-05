@@ -12,11 +12,10 @@ async function init() {
     if (!response.ok) throw new Error('Impossible de charger les données');
     pouleData = await response.json();
 
-    // Update subtitle with data info
+    // Update subtitle
     const remaining = pouleData.remainingMatches.length;
-    const played = pouleData.playedMatches.length;
     const subtitle = document.querySelector('.subtitle');
-    subtitle.textContent = `Simulation Monte Carlo · 10 000 itérations · Saison ${pouleData.saison} · ${remaining} matchs restants · MAJ ${pouleData.lastUpdated}`;
+    subtitle.textContent = `Matchs restants : ${remaining}`;
 
     // Render scenario controls (V3) — loads saved selections from localStorage
     Scenario.renderScenarios(pouleData.remainingMatches, onScenarioChange);
